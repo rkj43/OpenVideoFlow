@@ -1,0 +1,23 @@
+input:
+  prompt: "A breaking news story about a new discovery on Mars"
+
+num_scenes: 3
+style: news_report
+
+pipeline:
+  - storyboard
+  - video
+  - render
+
+providers:
+  llm:
+    provider: anthropic
+    # api_key: sk-ant-...  # or set ANTHROPIC_API_KEY
+
+  video:
+    provider: replicate
+    model: wan-t2v
+    # api_key: ...  # or set REPLICATE_API_TOKEN
+
+output: "output.mp4"
+workspace: "workspace"

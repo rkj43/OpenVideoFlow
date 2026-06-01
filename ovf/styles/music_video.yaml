@@ -1,0 +1,10 @@
+name: music_video
+description: "Stylized music video — fast cuts, moody lighting, creative angles"
+
+prompt_prefix: "music video production, moody lighting, creative camera angles,"
+prompt_suffix: ", music video aesthetic, stylized, dynamic movement, visual effects"
+negative_prompt: "static, boring, plain, news footage, documentary, realistic"
+
+provider_params:
+  cfg_scale: 8.5
+  steps: 35

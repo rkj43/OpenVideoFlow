@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import yaml
 
@@ -19,6 +19,7 @@ class OVFConfig:
     workspace: str = "workspace"
     output: str = "output.mp4"
     num_scenes: int = 3
+    style: Optional[str] = None
 
 
 def load_config(path: str | Path) -> OVFConfig:
@@ -30,6 +31,7 @@ def load_config(path: str | Path) -> OVFConfig:
     workspace = raw.get("workspace", "workspace")
     output = raw.get("output", "output.mp4")
     num_scenes = raw.get("num_scenes", 3)
+    style = raw.get("style", None)
 
     providers: dict[str, ProviderConfig] = {}
     for key, val in raw.get("providers", {}).items():
@@ -47,4 +49,5 @@ def load_config(path: str | Path) -> OVFConfig:
         workspace=workspace,
         output=output,
         num_scenes=num_scenes,
+        style=style,
     )

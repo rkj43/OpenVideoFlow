@@ -4,24 +4,28 @@ from typing import Any, Type
 from ovf.providers.base import AudioProvider, ImageProvider, VideoProvider
 from ovf.providers.video.comfyui import ComfyUIVideoProvider
 from ovf.providers.video.local import LocalVideoProvider
+from ovf.providers.video.replicate import ReplicateVideoProvider
+from ovf.providers.video.fal import FalVideoProvider
 from ovf.providers.image.comfyui import ComfyUIImageProvider
 from ovf.providers.image.local import LocalImageProvider
 from ovf.providers.audio.local import LocalAudioProvider
 from ovf.providers.audio.elevenlabs import ElevenLabsProvider
 
 _BUILTIN_VIDEO: dict[str, Type[VideoProvider]] = {
-    "comfyui": ComfyUIVideoProvider,
-    "local": LocalVideoProvider,
+    "comfyui":   ComfyUIVideoProvider,
+    "replicate": ReplicateVideoProvider,
+    "fal":       FalVideoProvider,
+    "local":     LocalVideoProvider,
 }
 
 _BUILTIN_IMAGE: dict[str, Type[ImageProvider]] = {
     "comfyui": ComfyUIImageProvider,
-    "local": LocalImageProvider,
+    "local":   LocalImageProvider,
 }
 
 _BUILTIN_AUDIO: dict[str, Type[AudioProvider]] = {
-    "local": LocalAudioProvider,
-    "elevenlabs": ElevenLabsProvider,
+    "local":       LocalAudioProvider,
+    "elevenlabs":  ElevenLabsProvider,
 }
 
 

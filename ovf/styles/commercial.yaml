@@ -1,0 +1,10 @@
+name: commercial
+description: "Polished advertising — clean, bright, product-focused"
+
+prompt_prefix: "commercial advertisement, clean studio lighting, polished production,"
+prompt_suffix: ", advertising quality, bright colors, professional commercial"
+negative_prompt: "dark, gritty, rough, amateur, news style, documentary"
+
+provider_params:
+  cfg_scale: 7.0
+  steps: 30

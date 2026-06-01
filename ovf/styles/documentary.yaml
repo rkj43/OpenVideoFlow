@@ -1,0 +1,10 @@
+name: documentary
+description: "Observational documentary — natural light, handheld, authentic"
+
+prompt_prefix: "documentary footage, natural lighting, observational camera,"
+prompt_suffix: ", documentary style, authentic, realistic, handheld camera"
+negative_prompt: "animated, fantasy, over-saturated, staged, artificial lighting"
+
+provider_params:
+  cfg_scale: 6.5
+  steps: 30

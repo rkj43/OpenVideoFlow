@@ -5,10 +5,11 @@ from typing import Optional
 
 from ovf.context import Context, Scene
 from ovf.nodes.base import Node, console
+from ovf.style import Style
 
 
 class StoryboardNode(Node):
-    """Breaks the prompt into scenes.
+    """Breaks the prompt into scenes and applies style to each scene prompt.
 
     Uses an LLM if a provider is configured, otherwise falls back to
     heuristic sentence splitting so the pipeline works with zero API keys.
@@ -16,20 +17,33 @@ class StoryboardNode(Node):
 
     name = "storyboard"
 
-    def __init__(self, num_scenes: int = 3, llm_provider: Optional[str] = None, api_key: Optional[str] = None):
+    def __init__(
+        self,
+        num_scenes: int = 3,
+        llm_provider: Optional[str] = None,
+        api_key: Optional[str] = None,
+        style: Optional[Style] = None,
+    ):
         self.num_scenes = num_scenes
-        self.llm_provider = llm_provider  # "openai" | "anthropic" | None
+        self.llm_provider = llm_provider
         self.api_key = api_key
+        self.style = style
 
     def _run(self, context: Context) -> Context:
         if self.llm_provider == "openai":
-            scenes = self._openai(context.prompt)
+            raw_scenes = self._openai(context.prompt)
         elif self.llm_provider == "anthropic":
-            scenes = self._anthropic(context.prompt)
+            raw_scenes = self._anthropic(context.prompt)
         else:
-            scenes = self._heuristic(context.prompt, self.num_scenes)
+            raw_scenes = self._heuristic(context.prompt, self.num_scenes)
 
-        context.scenes = [Scene(index=i, prompt=p) for i, p in enumerate(scenes)]
+        if self.style:
+            console.print(f"  Style: [bold magenta]{self.style.name}[/bold magenta]")
+            styled = [self.style.apply(s) for s in raw_scenes]
+        else:
+            styled = raw_scenes
+
+        context.scenes = [Scene(index=i, prompt=p) for i, p in enumerate(styled)]
         for scene in context.scenes:
             console.print(f"  Scene {scene.index + 1}: {scene.prompt}")
         return context
@@ -90,7 +104,6 @@ class StoryboardNode(Node):
         return self._parse_json_scenes(raw, prompt)
 
     def _parse_json_scenes(self, raw: str, fallback_prompt: str) -> list[str]:
-        # strip markdown code fences if present
         raw = re.sub(r"^```[a-z]*\n?", "", raw).rstrip("`").strip()
         try:
             scenes = json.loads(raw)

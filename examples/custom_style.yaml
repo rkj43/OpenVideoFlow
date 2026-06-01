@@ -1,0 +1,18 @@
+input:
+  prompt: "A city street at night in the rain"
+
+num_scenes: 3
+style: styles/noir.yaml   # custom style file — create your own
+
+pipeline:
+  - storyboard
+  - video
+  - render
+
+providers:
+  video:
+    provider: fal
+    model: wan-t2v
+
+output: "output.mp4"
+workspace: "workspace"

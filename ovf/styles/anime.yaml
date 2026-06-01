@@ -1,0 +1,10 @@
+name: anime
+description: "Japanese anime style — cel shading, vibrant colors, expressive"
+
+prompt_prefix: "anime style, cel shading, vibrant colors, detailed illustration,"
+prompt_suffix: ", japanese animation, studio quality, anime aesthetic"
+negative_prompt: "realistic, photographic, 3D render, low quality, blurry"
+
+provider_params:
+  cfg_scale: 8.0
+  steps: 35

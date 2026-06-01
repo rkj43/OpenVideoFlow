@@ -1,0 +1,10 @@
+name: news_report
+description: "Broadcast news footage — handheld camera, professional lighting, realistic"
+
+prompt_prefix: "broadcast news footage, professional camera operator, studio lighting,"
+prompt_suffix: ", news report style, realistic, 4K broadcast quality, professional journalism"
+negative_prompt: "animated, cartoon, cinematic color grading, fantasy, sci-fi, blurry"
+
+provider_params:
+  cfg_scale: 7.5
+  steps: 30

@@ -16,13 +16,14 @@ from ovf.nodes.render import RenderNode
 from ovf.pipeline import Pipeline
 from ovf.registry import get_image_provider, get_video_provider, get_audio_provider, list_providers
 from ovf.storage import Storage
+from ovf.style import Style, load_style
 
 console = Console()
 
 _NODE_NAMES = {"storyboard", "image", "video", "voice", "render"}
 
 
-def _build_nodes(config) -> list[Node]:
+def _build_nodes(config, style: Optional[Style]) -> list[Node]:
     image_provider = None
     video_provider = None
     audio_provider = None
@@ -47,15 +48,16 @@ def _build_nodes(config) -> list[Node]:
                 num_scenes=config.num_scenes,
                 llm_provider=llm_cfg.provider if llm_cfg else None,
                 api_key=llm_cfg.options.get("api_key") if llm_cfg else None,
+                style=style,
             ))
         elif name == "image":
             if image_provider is None:
                 raise ValueError("Pipeline includes 'image' node but no image provider is configured")
-            nodes.append(ImageNode(provider=image_provider))
+            nodes.append(ImageNode(provider=image_provider, style=style))
         elif name == "video":
             if video_provider is None:
                 raise ValueError("Pipeline includes 'video' node but no video provider is configured")
-            nodes.append(VideoNode(provider=video_provider))
+            nodes.append(VideoNode(provider=video_provider, style=style))
         elif name == "voice":
             if audio_provider is None:
                 raise ValueError("Pipeline includes 'voice' node but no audio provider is configured")
@@ -76,7 +78,8 @@ def main():
 @click.argument("config_path", metavar="CONFIG", type=click.Path(exists=True, path_type=Path))
 @click.option("--workspace", default=None, help="Override workspace directory")
 @click.option("--output", default=None, help="Override output file path")
-def run(config_path: Path, workspace: Optional[str], output: Optional[str]):
+@click.option("--style", default=None, help="Override style (name or path to YAML)")
+def run(config_path: Path, workspace: Optional[str], output: Optional[str], style: Optional[str]):
     """Run a video generation pipeline from a YAML config file."""
     config = load_config(config_path)
     if workspace:
@@ -84,12 +87,17 @@ def run(config_path: Path, workspace: Optional[str], output: Optional[str]):
     if output:
         config.output = output
 
+    style_name = style or config.style
+    active_style: Optional[Style] = load_style(style_name) if style_name else None
+    if active_style:
+        console.print(f"Style: [bold magenta]{active_style.name}[/bold magenta] — {active_style.description}")
+
     storage = Storage(config.workspace)
     run_dir = storage.new_run()
     console.print(f"Run directory: [dim]{run_dir}[/dim]")
 
     context = Context(prompt=config.prompt, run_dir=run_dir)
-    nodes = _build_nodes(config)
+    nodes = _build_nodes(config, active_style)
     pipeline = Pipeline(*nodes)
     pipeline.run(context)
 
@@ -105,3 +113,17 @@ def list_providers_cmd():
         for name, module in sorted(entries.items()):
             table.add_row(name, module)
         console.print(table)
+
+
+@main.command("list-styles")
+def list_styles_cmd():
+    """List all available styles."""
+    from ovf.style import _BUILTIN_DIR
+    table = Table(title="Available styles", show_header=True)
+    table.add_column("name", style="bold magenta")
+    table.add_column("description")
+    for p in sorted(_BUILTIN_DIR.glob("*.yaml")):
+        s = load_style(p.stem)
+        table.add_row(s.name, s.description)
+    console.print(table)
+    console.print("[dim]Use custom styles with: style: path/to/my_style.yaml[/dim]")

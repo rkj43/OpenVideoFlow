@@ -1,0 +1,22 @@
+input:
+  prompt: "A dragon flying over Dublin at golden hour"
+
+num_scenes: 3
+style: cinematic
+
+pipeline:
+  - storyboard
+  - video
+  - render
+
+providers:
+  llm:
+    provider: anthropic
+
+  video:
+    provider: fal
+    model: wan-t2v
+    # api_key: ...  # or set FAL_KEY
+
+output: "output.mp4"
+workspace: "workspace"

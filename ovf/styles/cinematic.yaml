@@ -1,0 +1,10 @@
+name: cinematic
+description: "Hollywood film look — anamorphic lens, color grading, dramatic lighting"
+
+prompt_prefix: "cinematic film, anamorphic lens, dramatic lighting, film grain,"
+prompt_suffix: ", epic cinematic style, color graded, Hollywood production quality, 4K"
+negative_prompt: "amateur, shaky cam, low quality, poorly lit, news footage, documentary"
+
+provider_params:
+  cfg_scale: 7.0
+  steps: 35
