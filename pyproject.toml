@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openvideoflow"
+version = "0.1.0"
+description = "Open-source workflow orchestration for AI video generation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "click>=8.1",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "requests>=2.31",
+    "websocket-client>=1.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-mock>=3.12"]
+
+[project.scripts]
+ovf = "ovf.cli:main"
+
+[project.entry-points."ovf.providers.video"]
+comfyui = "ovf.providers.video.comfyui:ComfyUIVideoProvider"
+local = "ovf.providers.video.local:LocalVideoProvider"
+
+[project.entry-points."ovf.providers.image"]
+comfyui = "ovf.providers.image.comfyui:ComfyUIImageProvider"
+local = "ovf.providers.image.local:LocalImageProvider"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ovf*"]

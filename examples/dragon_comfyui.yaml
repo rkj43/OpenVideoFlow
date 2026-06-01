@@ -1,0 +1,27 @@
+input:
+  prompt: "A dragon flying over Dublin at golden hour, cinematic slow motion"
+
+pipeline:
+  - storyboard
+  - image
+  - video
+  - render
+
+providers:
+  image:
+    provider: comfyui
+    host: "127.0.0.1"
+    port: 8188
+    workflow: "workflows/flux_t2i.json"
+    prompt_node_id: "6"
+
+  video:
+    provider: comfyui
+    host: "127.0.0.1"
+    port: 8188
+    workflow: "workflows/wan_i2v.json"
+    prompt_node_id: "6"
+    image_node_id: "12"
+
+output: "output.mp4"
+workspace: "workspace"

@@ -1,0 +1,9 @@
+# Smoke-test pipeline using local files — no ComfyUI required.
+input:
+  prompt: "A peaceful mountain lake at sunrise"
+
+pipeline:
+  - storyboard
+
+workspace: "workspace"
+output: "output.mp4"
