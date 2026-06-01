@@ -7,6 +7,7 @@ from ovf.providers.video.local import LocalVideoProvider
 from ovf.providers.image.comfyui import ComfyUIImageProvider
 from ovf.providers.image.local import LocalImageProvider
 from ovf.providers.audio.local import LocalAudioProvider
+from ovf.providers.audio.elevenlabs import ElevenLabsProvider
 
 _BUILTIN_VIDEO: dict[str, Type[VideoProvider]] = {
     "comfyui": ComfyUIVideoProvider,
@@ -20,6 +21,7 @@ _BUILTIN_IMAGE: dict[str, Type[ImageProvider]] = {
 
 _BUILTIN_AUDIO: dict[str, Type[AudioProvider]] = {
     "local": LocalAudioProvider,
+    "elevenlabs": ElevenLabsProvider,
 }
 
 
@@ -55,3 +57,11 @@ def get_audio_provider(name: str, **options: Any) -> AudioProvider:
         available = ", ".join(sorted(registry))
         raise ValueError(f"Unknown audio provider '{name}'. Available: {available}")
     return cls(**options)
+
+
+def list_providers() -> dict[str, dict[str, str]]:
+    return {
+        "video": {k: v.__module__ for k, v in {**_load_plugins("ovf.providers.video"), **_BUILTIN_VIDEO}.items()},
+        "image": {k: v.__module__ for k, v in {**_load_plugins("ovf.providers.image"), **_BUILTIN_IMAGE}.items()},
+        "audio": {k: v.__module__ for k, v in {**_load_plugins("ovf.providers.audio"), **_BUILTIN_AUDIO}.items()},
+    }

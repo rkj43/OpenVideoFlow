@@ -1,0 +1,21 @@
+# Text-to-video directly — no image step, uses Wan T2V workflow
+input:
+  prompt: "A peaceful mountain lake at sunrise, birds flying overhead"
+
+num_scenes: 2
+
+pipeline:
+  - storyboard
+  - video
+  - render
+
+providers:
+  video:
+    provider: comfyui
+    host: "127.0.0.1"
+    port: 8188
+    workflow: "examples/workflows/wan_t2v.json"
+    prompt_node_id: "2"
+
+output: "output.mp4"
+workspace: "workspace"

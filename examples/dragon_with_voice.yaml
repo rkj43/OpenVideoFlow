@@ -7,12 +7,12 @@ pipeline:
   - storyboard
   - image
   - video
+  - voice
   - render
 
 providers:
   llm:
     provider: anthropic
-    # api_key: sk-ant-...  # or set ANTHROPIC_API_KEY env var
 
   image:
     provider: comfyui
@@ -28,6 +28,11 @@ providers:
     workflow: "examples/workflows/wan_i2v.json"
     prompt_node_id: "2"
     image_node_id: "3"
+
+  audio:
+    provider: elevenlabs
+    # api_key: ...  # or set ELEVENLABS_API_KEY env var
+    voice_id: "21m00Tcm4TlvDq8ikWAM"
 
 output: "output.mp4"
 workspace: "workspace"

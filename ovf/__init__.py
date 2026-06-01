@@ -1,6 +1,6 @@
 from ovf.pipeline import Pipeline
 from ovf.context import Context, Scene
-from ovf.nodes import StoryboardNode, ImageNode, VideoNode, RenderNode
+from ovf.nodes import StoryboardNode, ImageNode, VideoNode, VoiceNode, RenderNode
 
 __version__ = "0.1.0"
 __all__ = [
@@ -10,5 +10,6 @@ __all__ = [
     "StoryboardNode",
     "ImageNode",
     "VideoNode",
+    "VoiceNode",
     "RenderNode",
 ]
